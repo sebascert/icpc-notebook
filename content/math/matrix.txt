@@ -1,0 +1,86 @@
+Matrix diagonal formulas (0-based indexing)
+
+For a cell (i,j) in an n x m matrix:
+
+* i = row, 0 <= i < n
+* j = column, 0 <= j < m
+
+1. Diagonal identifiers
+
+Main-direction diagonal ():
+raw_main = i - j
+
+For use as an array index:
+id_main = i - j + m - 1
+
+Range:
+0 ... n+m-2
+
+Secondary-direction diagonal (/):
+id_secondary = i + j
+
+Range:
+0 ... n+m-2
+
+2. Testing the two central diagonals of an n x n matrix
+
+Cell is on the central main diagonal:
+i == j
+
+Cell is on the central secondary diagonal:
+i + j == n - 1
+
+3. Position inside a main-direction diagonal ()
+
+Counting from the top-left end of the diagonal:
+pos_main = min(i,j)
+
+The first cell of the diagonal is:
+start_i = max(0,i-j)
+start_j = max(0,j-i)
+
+Recover the cell from the diagonal start and position:
+i = start_i + pos_main
+j = start_j + pos_main
+
+For the central main diagonal, where i == j:
+pos_main = i
+
+4. Position inside a secondary-direction diagonal (/)
+
+Counting from the top-right end toward the bottom-left:
+pos_secondary = min(i,m-1-j)
+
+Let:
+d = i+j
+
+The first, topmost cell of the diagonal is:
+start_i = max(0,d-(m-1))
+start_j = min(d,m-1)
+
+Equivalent formulas using the cell directly:
+start_i = max(0,i+j-(m-1))
+start_j = min(i+j,m-1)
+
+Recover the cell from the diagonal start and position:
+i = start_i + pos_secondary
+j = start_j - pos_secondary
+
+Equivalent position formulas:
+pos_secondary = i-start_i
+pos_secondary = start_j-j
+
+For the central secondary diagonal of an n x n matrix,
+where i+j == n-1:
+pos_secondary = i
+
+5. Number of diagonals
+
+Number of main-direction diagonals:
+n+m-1
+
+Number of secondary-direction diagonals:
+n+m-1
+
+Both diagonal-index ranges are:
+0 ... n+m-2

@@ -19,6 +19,6 @@ jobs:
     - name: Build pdf
       run: make kactl
     - name: Run compiles
-      run: make test-compiles
+      run: make test_compiles
     - name: Run stress tests
       run: make test

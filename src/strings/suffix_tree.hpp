@@ -1,0 +1,63 @@
+/**
+ * Author: Ukkonen
+ * Date: Unknown
+ * License: CC0
+ * Source: Cookie Clickers ICPC Notebook
+ * Description: Online Suffix Tree construction (Ukkonen's algorithm).
+ * Usage: SuffixTree st; for(char c : s) st.add(c);
+ * Time: $O(N \log \Sigma)$
+ * Status: Tested
+ * Lines: [15,63]
+ */
+#pragma once
+#include "template.hpp"
+
+const int MAXN = 1e5;
+int SUFFIX_TREE_INF = 1e9;
+struct SuffixTree {
+	char s[MAXN];
+	map<int, int> to[MAXN];
+	int len[MAXN] = {SUFFIX_TREE_INF}, fpos[MAXN], link[MAXN];
+	int node, pos, sz = 1, n = 0;
+	int make_node(int p, int l) {
+		fpos[sz] = p;
+		len[sz] = l;
+		return sz++;
+	}
+	void go_edge() {
+		while(pos > len[to[node][s[n - pos]]]) {
+			node = to[node][s[n - pos]];
+			pos -= len[node];
+		}
+	}
+	void add(int c) {
+		s[n++] = c;
+		pos++;
+		int last = 0;
+		while(pos > 0) {
+			go_edge();
+			int edge = s[n - pos];
+			int& v = to[node][edge];
+			int t = s[fpos[v] + pos - 1];
+			if(v == 0) {
+				v = make_node(n - pos, SUFFIX_TREE_INF);
+				link[last] = node;
+				last = 0;
+			} else if(t == c) {
+				link[last] = node;
+				return;
+			} else {
+				int u = make_node(fpos[v], pos - 1);
+				to[u][c] = make_node(n - 1, SUFFIX_TREE_INF);
+				to[u][t] = v;
+				fpos[v] += pos - 1;
+				len[v] -= pos - 1;
+				v = u;
+				link[last] = u;
+				last = u;
+			}
+			if(node == 0) pos--;
+			else node = link[node];
+		}
+	}
+};
